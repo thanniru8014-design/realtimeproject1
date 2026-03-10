@@ -1,0 +1,72 @@
+<div class="container">
+  <header class="header">
+    <h1>{{ title }}</h1>
+    <p class="subtitle">Transform monitoring alerts into incident actions with deduplication, throttling, and escalation</p>
+  </header>
+
+  <div class="content">
+    <div class="actions-section">
+      <h2>Demo Controls</h2>
+      <button (click)="runDemo()" [disabled]="isTestRunning" class="btn btn-primary">
+        {{ isTestRunning ? 'Running...' : 'Run Demo' }}
+      </button>
+      <button (click)="clearData()" [disabled]="isTestRunning" class="btn btn-secondary">
+        Clear
+      </button>
+    </div>
+
+    <div class="alerts-section">
+      <h2>Input Alerts ({{ alerts.length }})</h2>
+      <div class="alerts-list">
+        <div *ngIf="alerts.length === 0" class="empty-state">
+          No alerts processed yet. Click "Run Demo" to get started.
+        </div>
+        <div *ngFor="let alert of alerts" class="alert-item" [ngClass]="'severity-' + alert.severity">
+          <div class="alert-header">
+            <span class="alert-fingerprint">{{ alert.fingerprint }}</span>
+            <span class="alert-severity" [ngClass]="'severity-' + alert.severity">
+              {{ alert.severity }}
+            </span>
+          </div>
+          <div class="alert-body">
+            <p><strong>Source:</strong> {{ alert.source }}</p>
+            <p><strong>Message:</strong> {{ alert.message }}</p>
+            <p><strong>Timestamp:</strong> {{ alert.timestamp }}</p>
+            <p *ngIf="alert.labels" class="alert-metadata"><strong>Labels:</strong> {{ alert.labels | json }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <h2>Output Actions ({{ actions.length }})</h2>
+      <div class="actions-list">
+        <div *ngIf="actions.length === 0" class="empty-state">
+          No actions generated yet. Process some alerts!
+        </div>
+        <div *ngFor="let action of actions" class="action-item" [ngClass]="'action-' + action.action">
+          <div class="action-header">
+            <span class="action-type">{{ action.action | uppercase }}</span>
+            <span class="action-severity" [ngClass]="'severity-' + action.severity">
+              {{ action.severity }}
+            </span>
+          </div>
+          <div class="action-body">
+            <p><strong>Incident ID:</strong> {{ action.incident_id }}</p>
+            <p><strong>Reason:</strong> {{ action.reason }}</p>
+            <p><strong>Fingerprint:</strong> {{ action.fingerprint }}</p>
+            <p><strong>Source:</strong> {{ action.source }}</p>
+            <p><strong>Timestamp:</strong> {{ action.timestamp }}</p>
+            <p *ngIf="action.escalated" class="escalated-indicator">
+              <strong>📈 Escalated to {{ action.severity }}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>For detailed documentation and test results, run: <code>ng test</code></p>
+  </footer>
+</div>
